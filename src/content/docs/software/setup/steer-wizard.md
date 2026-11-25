@@ -50,7 +50,7 @@ example when the tablet goes to sleep. Open it again to go on.
 
 ## The steps
 
-There are 15. With **GPS Only** chosen in step 3, the steering steps are left
+There are 16. With **GPS Only** chosen in step 3, the steering steps are left
 out.
 
 ### 1 to 5: the tractor
@@ -176,13 +176,73 @@ test, as it builds on that value.
 While it measures, **Ackermann** is set to 100, which is neutral. The result
 lies between 0 and 200. **Stop** before the end leaves the value as it was.
 
-### 13: Steering Gains
+### 13: Tune the Wheel Response
+
+This step is optional. It finds three settings by moving the wheels and
+measuring how they answer, instead of you trying values by hand:
+
+- **Minimum To Move**: the least power that moves the wheels.
+- **Max Limit**: the most power the module uses.
+- **Proportional Gain**: how hard the module drives the wheels towards the angle
+  asked for.
+
+Leave it out with **Next** if you would rather set them yourself on the
+AutoSteer page.
+
+Before you tap **Start**:
+
+- Engine at working speed, oil warm, the wheels about straight (within 8°),
+  and nobody near the front wheels.
+- The tractor still, or rolling at walking pace on open ground. Above 6 km/h it
+  will not start, and above 10 km/h it stops.
+- Your own **Max Limit** typed in. The test never drives above it, because only
+  you know what your valve's coil or your motor can take.
+
+Choose **Wheel speed wanted**: how fast the wheels should turn at the Max Limit.
+**Gentle** is 15°/s, **Normal** 25°/s and **Fast** 35°/s.
+
+![The Tune the Wheel Response step](../img/wizard-tune.png)
+
+1. **Start** runs the **stop check**. Before anything moves by itself, stop
+   the module once at the wheel: turn the steering wheel by hand if you have a
+   kickout sensor, or switch the steer switch off. With no switch, button or
+   sensor set up, the only stop is the **Stop** button on the page, and the
+   page says so. Then tap **Continue**.
+2. The wheels move by themselves for one to two minutes: small moves first,
+   then swings of up to 15°. The page says what it is measuring:
+   - **Minimum To Move**: the power at which the wheels first move, to the
+     right and to the left. The setting is a little under the lower of the two.
+   - **Max Limit**: how fast the wheels turn at rising power, until they turn as
+     fast as you chose, or more power turns them no faster. Then it takes the
+     lowest power that gives 90 % of their top speed: more would only heat a
+     coil or a motor.
+   - **Proportional Gain**: small turns at a rising gain. It takes the lowest
+     gain that settles about as fast as the best one without going past the
+     target, and checks it with 8° turns.
+3. The result shows each setting, old and new, and how the wheels turned.
+   **Use these values** puts them in use; **Keep the old values** leaves yours.
+   Nothing changes until you choose, and **Finish** saves them with the
+   vehicle. **Measurements** under the result shows the numbers behind it.
+
+The test stops by itself, and puts your own values back, when:
+
+- the wheels go more than 22° from where they started, or turn the wrong way.
+  Run the motor test (step 9) first: it finds the motor direction;
+- the module stops steering: the steer switch off, or a kickout;
+- the wheels stop answering: a hand on the wheel, or the wheels against a stop;
+- you tap **Stop**, leave the step, or close the wizard.
+
+Afterwards, set **Steer Response** on a line with AutoSteer on: see
+[AutoSteer settings](/software/setup/autosteer/).
+
+### 14: Steering Gains
 
 Starting values for how the tractor follows the line:
 
 - **Guidance algorithm (Stanley)**: off is Pure Pursuit, a good start. Stanley
   is more responsive at low speed.
-- **Proportional gain (Kp)**: how hard the steering corrects. Start at 10.
+- **Proportional gain (Kp)**: how hard the steering corrects. Start at 10, or
+  keep the value step 13 found.
 - **Integral gain (Ki)**: corrects a steady drift. Start at 0.
 - **Steer response hold**: how far ahead it looks. Higher is smoother.
 - **Side hill compensation**: degrees of steering per degree of roll.
@@ -190,7 +250,7 @@ Starting values for how the tractor follows the line:
 Leave them as they are the first time, and tune them afterwards while driving:
 see [AutoSteer settings](/software/setup/autosteer/).
 
-### 14: Speed and Sensors
+### 15: Speed and Sensors
 
 - **Min steer speed** and **Max steer speed**: AutoSteer works only between
   these.
@@ -201,7 +261,7 @@ see [AutoSteer settings](/software/setup/autosteer/).
   the motor rests. See
   [Deadzone and timing](/software/setup/autosteer/#deadzone-and-timing).
 
-### 15: Setup Complete
+### 16: Setup Complete
 
 The page lists any tests you skipped. Tap **Finish** to save everything into
 the vehicle profile.
